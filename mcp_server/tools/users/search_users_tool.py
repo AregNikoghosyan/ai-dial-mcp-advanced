@@ -7,26 +7,25 @@ class SearchUsersTool(BaseUserServiceTool):
 
     @property
     def name(self) -> str:
-        #TODO: Provide tool name as `search_users`
-        raise NotImplementedError()
+        return "search_users"
 
     @property
     def description(self) -> str:
-        #TODO: Provide description of this tool
-        raise NotImplementedError()
+        return "Searches for users in the User Management Service by name, surname, email, or gender."
 
     @property
     def input_schema(self) -> dict[str, Any]:
-        #TODO:
-        # Provide tool params Schema:
-        # - name: str
-        # - surname: str
-        # - email: str
-        # - gender: str
-        # None of them are required (see UserClient.search_users method)
-        raise NotImplementedError()
+        return {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "Filter by user's first name."},
+                "surname": {"type": "string", "description": "Filter by user's surname."},
+                "email": {"type": "string", "description": "Filter by user's email address."},
+                "gender": {"type": "string", "description": "Filter by user's gender."},
+                "limit": {"type": "integer", "description": "Max number of results to return (default 20)."}
+            },
+            "required": []
+        }
 
     async def execute(self, arguments: dict[str, Any]) -> str:
-        #TODO:
-        # Call user_client search_users (with `**arguments`) and return its results (it is async, don't forget to await)
-        raise NotImplementedError()
+        return await self._user_client.search_users(**arguments)

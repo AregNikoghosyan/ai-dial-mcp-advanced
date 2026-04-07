@@ -42,6 +42,7 @@ class UserClient:
             surname: Optional[str] = None,
             email: Optional[str] = None,
             gender: Optional[str] = None,
+            limit: int = 20,
     ) -> str:
         headers = {"Content-Type": "application/json"}
 
@@ -59,8 +60,13 @@ class UserClient:
 
         if response.status_code == 200:
             data = response.json()
-            print(f"Get {len(data)} users successfully")
-            return self.__users_to_string(data)
+            total = len(data)
+            data = data[:limit]
+            print(f"Get {total} users, returning first {len(data)}")
+            result = self.__users_to_string(data)
+            if total > limit:
+                result += f"\n(Showing {limit} of {total} total results. Use more specific filters to narrow down.)\n"
+            return result
 
         raise Exception(f"HTTP {response.status_code}: {response.text}")
 
